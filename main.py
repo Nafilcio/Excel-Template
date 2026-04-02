@@ -131,7 +131,10 @@ elif st.session_state.option == "SC (RWC)":
             # baru isi NaN
             df_sc.fillna("", inplace=True)
             df_benefit.fillna("", inplace=True)
-            df_cr.fillna("", inplace=True)
+            df_cr = df_cr.copy()
+            df_cr.replace([np.inf, -np.inf], np.nan, inplace=True)
+            df_cr = df_cr.astype(str)
+            df_cr.replace("nan", "", inplace=True)
 
             excel_bytes, fname = save_to_excel_d(
                 df_sc,
