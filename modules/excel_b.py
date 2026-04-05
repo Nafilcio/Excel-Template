@@ -176,9 +176,11 @@ def save_to_excel_b(df, filename: str):
         # sc.set_column(0, len(df.columns)-1, 15)
         for idx, col in enumerate(df.columns):
             series = df[col]
-        
+
+            series_str = series.astype("string").fillna("")
+            
             max_len = max(
-                series.fillna("").astype(str).apply(len).max(),  # hanya untuk hitung panjang
+                series_str.str.len().max(),  # hanya untuk hitung panjang
                 len(str(col)))
             sc.set_column(idx, idx, max_len + 2)
     
