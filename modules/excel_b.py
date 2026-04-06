@@ -118,7 +118,7 @@ def save_to_excel_b(df, filename: str):
         sc.hide_gridlines(2)
         sc.write(0, 0, "List Claim", plain_fmt)
         sc.write(1, 0, df["Client Name"].iloc[0] if not df.empty else "", plain_fmt)
-        sc.merge_range(2, 0, 2, 1, "YTD Mar 2026", plain_fmt)
+        sc.merge_range(2, 0, 2, 1, "YTD Feb 2026", plain_fmt)
         sc.write(3, 0, "", plain_fmt)
 
         # table for summary sheet
@@ -176,11 +176,9 @@ def save_to_excel_b(df, filename: str):
         # sc.set_column(0, len(df.columns)-1, 15)
         for idx, col in enumerate(df.columns):
             series = df[col]
-
-            series_str = series.astype("string").fillna("")
-            
+        
             max_len = max(
-                series_str.str.len().max(),  # hanya untuk hitung panjang
+                series.astype(str).map(len).max(),  # hanya untuk hitung panjang
                 len(str(col)))
             sc.set_column(idx, idx, max_len + 2)
     
