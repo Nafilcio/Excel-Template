@@ -59,7 +59,7 @@ def move_to_template(df):
     return df_transformed
 
 # compile to an excel workbook
-def save_to_excel_b(data_dict, filename: str):
+def save_to_excel_b(df, filename: str):
     output = BytesIO()
     with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
         for sheet_name, df in data_dict.item():
