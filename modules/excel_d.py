@@ -360,9 +360,9 @@ def save_to_excel_d(df_sc, df_benefit, claim_ratio_df, filename: str):
         # Grand total
         summary_sheet.write(r,0,'Grand Total',bold_plain_border)
         for ci,col_name in enumerate(cr_columns_header[1:],start=1):
-            if col_name == 'CR':
+            if col_name == 'Claim Ratio':
                 summary_sheet.write_number(r,ci,grand_cr,highlight_yellow_bold)
-            elif col_name == 'Est CR':
+            elif col_name == 'Est Claim Ratio':
                 summary_sheet.write_number(r,ci,grand_est_cr,highlight_yellow_bold)
             else:
                 v = grand.get(col_name, '')
