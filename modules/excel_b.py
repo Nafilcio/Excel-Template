@@ -64,6 +64,7 @@ def save_to_excel_b(df, filename: str):
     with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
         # Clean data
         df = df.copy()
+        df[np.isinf(df)] = np.nan
         df = df.fillna("")
         df = df.astype(str)
         # Write to Excel
