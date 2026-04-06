@@ -342,7 +342,7 @@ def save_to_excel_d(df_sc, df_benefit, claim_ratio_df, filename: str):
                 for ci, col_name in enumerate(cr_columns_header):
                     val = rowdata.get(col_name, 0)
 
-                    if col_name in ('CR', 'Est CR'):
+                    if col_name in ('Claim Ratio', 'Est Claim Ratio'):
                         summary_sheet.write_number(r, ci, float(val), highlight_yellow)
                     elif col_name in ('Net Premi','Est Claim Total','Billed','Unpaid','Excess Total','Excess Coy','Excess Emp','Claim'):
                         try:
@@ -360,9 +360,9 @@ def save_to_excel_d(df_sc, df_benefit, claim_ratio_df, filename: str):
         # Grand total
         summary_sheet.write(r,0,'Grand Total',bold_plain_border)
         for ci,col_name in enumerate(cr_columns_header[1:],start=1):
-            if col_name == 'Claim Ratio':
+            if col_name == 'CR':
                 summary_sheet.write_number(r,ci,grand_cr,highlight_yellow_bold)
-            elif col_name == 'Est Claim Ratio':
+            elif col_name == 'Est CR':
                 summary_sheet.write_number(r,ci,grand_est_cr,highlight_yellow_bold)
             else:
                 v = grand.get(col_name, '')
