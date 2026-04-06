@@ -63,7 +63,7 @@ def save_to_excel_b(df, filename: str):
     output = BytesIO()
     with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
         # Clean data
-        df = df.replace([np.inf, -np.inf], np.nan)
+        df = df.copy()
         df = df.fillna("")
         df = df.astype(str)
         # Write to Excel
