@@ -292,8 +292,8 @@ def save_to_excel_f(df_sc, df_benefit, filename: str):
             
         ws.set_column(i, i, max_len + 2)
 
-        autofit(sc, df_sc)
-        autofit(benefit, df_benefit)
+        df_sc = df_sc.astype(str)
+        df_benefit = df_benefit.astype(str)
 
     output.seek(0)
     return output.getvalue(), filename
