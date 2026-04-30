@@ -238,7 +238,7 @@ def save_to_excel_d(df_sc, df_benefit, claim_ratio_df, filename: str):
     # -------------------------
     # AGGREGATE SC
     # -------------------------
-    member_count = df_sc.groupby(['Client Name','Policy No','Product Type'])['Member No'].nunique().reset_index().rename(columns={'Member No': 'Member'})
+    member_count = df_sc.groupby(['Client Name','Policy No','Product Type'])['Member No'].nunique().reset_index().rename(columns={'Member No': 'Member', 'Product Type': 'Product'})
     
     sc_grouped = df_sc.groupby(['Client Name','Policy No', 'Product Type'], dropna=False).agg({
         'Sum of Billed':'sum',
@@ -249,7 +249,7 @@ def save_to_excel_d(df_sc, df_benefit, claim_ratio_df, filename: str):
         'Sum of Excess Emp':'sum'
     }).reset_index().rename(columns={'Sum of Accepted':'Claim', 'Product Type':'Product'})
 
-    sc_grouped = sc_grouped.merge(member_count,on=['Client Name','Policy No','Product Type'],how='left')
+    sc_grouped = sc_grouped.merge(member_count,on=['Client Name','Policy No','Product'],how='left')
     # -------------------------
     # MERGE with CR
     # -------------------------
