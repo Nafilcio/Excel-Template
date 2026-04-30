@@ -269,7 +269,7 @@ def save_to_excel_d(df_sc, df_benefit, claim_ratio_df, filename: str):
     )
     # Tambahin kolom untuk kebutuhan report
     merged['Product'] = merged.get('Product Type', '')
-    merged['Member'] = merged.get('Membership', '')
+    merged['Member'] = merged.get('Membership', 0)
 
     # Ensure merged numeric
     for col in ['Sum of Billed','Sum of Unpaid','Sum of Excess Total','Sum of Excess Coy','Sum of Excess Emp','Claim']:
@@ -286,6 +286,10 @@ def save_to_excel_d(df_sc, df_benefit, claim_ratio_df, filename: str):
 
     merged['CR'] = merged.apply(lambda r: (r['Claim'] / r['Net Premi'] * 100) if r['Net Premi'] else 0, axis=1)
     merged['Est CR'] = merged.apply(lambda r: (r['Est Claim Total'] / r['Net Premi'] * 100) if r['Net Premi'] else 0, axis=1)
+
+    merged = merged.rename(columns={'Excess Coy': 'Excess Company','Excess Emp': 'Excess Employee','CR': 'Claim Ratio','Est CR': 'Est Claim Ratio Full Year'})
+
+    merged = merged.drop_duplicates(subset=['Policy No','Company','Product'])
 
     cr_columns_header = ["Policy No","Company","Product","Member","Net Premi","Billed","Unpaid","Excess Total","Excess Company","Excess Employee","Claim","Claim Ratio","Est Claim Ratio Full Year"]
     for c in cr_columns_header:
