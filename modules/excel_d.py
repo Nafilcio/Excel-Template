@@ -255,14 +255,14 @@ def save_to_excel_d(df_sc, df_benefit, claim_ratio_df, filename: str):
  
     # rename kolom member dari claim ratio
     member_col = next((c for c in cr.columns 
-                       if c.strip().lower() in ['member', 'members']),None)
+                       if c.strip().lower() in ['member', 'members', 'member count', 'total member', 'lives']
     if member_col:
      cr = cr.rename(columns={member_col: 'Member'})
     else:
      cr['Member'] = 0
 
     # merge
-    merged = cr.merge(sc_grouped,left_on=['Company', 'Policy No'],right_on=['Client Name', 'Policy No'],how='left',suffixes=('', '_sc'))
+    merged = cr.merge(sc_grouped, on='Policy No', how='left',suffixes=('', '_sc'))
 
     # Ensure merged numeric
     for col in ['Sum of Billed','Sum of Unpaid','Sum of Excess Total','Sum of Excess Coy','Sum of Excess Emp','Claim']:
