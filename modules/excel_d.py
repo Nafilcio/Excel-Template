@@ -346,7 +346,7 @@ def save_to_excel_d(df_sc, df_benefit, claim_ratio_df, filename: str):
             ("Est Claim Ratio (%)", grand_est_cr, percent_format)
         ]
  
-        for i,(name,val,fmt) in enumerate(metrics,start=4):
+        for i,(name,val,fmt) in enumerate(metrics,start=5):
             summary_sheet.write(i,0,name,borderbold_fmt)
             summary_sheet.write(i,1,val,fmt)
  
@@ -403,11 +403,11 @@ def save_to_excel_d(df_sc, df_benefit, claim_ratio_df, filename: str):
         sc_sheet.write(3,0,'Periode of Policy:   ', plain_fmt)
  
         for ci,col_name in enumerate(df_sc.columns):
-            sc_sheet.write(6,ci,col_name,header_fmt)
+            sc_sheet.write(5,ci,col_name,header_fmt)
  
         koma_cols = ['Sum of Billed','Sum of Accepted','Sum of Excess Coy','Sum of Excess Emp','Sum of Excess Total','Sum of Unpaid']
  
-        for rr, rowdata in enumerate(df_sc.to_dict("records"), start=7):
+        for rr, rowdata in enumerate(df_sc.to_dict("records"), start=6):
             for ci, (col_name, val) in enumerate(rowdata.items()):
                 # koma cols ( 0 -> cell kosong)
                 if col_name in koma_cols:
