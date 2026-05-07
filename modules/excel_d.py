@@ -9,18 +9,10 @@ def filter_data(df):
     return df[df['ClaimStatus'] == 'R']
  
 def keep_last_duplicate(df):
-    df.columns = (
-        df.columns
-        .str.strip()
-        .str.replace(" ", "", regex=False)
-    )
-
     duplicate_claims = df[df.duplicated(subset='ClaimNo', keep=False)]
-
     if not duplicate_claims.empty:
         st.write("Duplicated ClaimNo values:")
         st.write(duplicate_claims[['ClaimNo']].drop_duplicates())
-
     return df.drop_duplicates(subset='ClaimNo', keep='last')
  
 def filter_benefit_data(df_benefit, df_sc):
@@ -516,17 +508,10 @@ def run_d(uploaded_sc, uploaded_benefit, uploaded_cr, policy_filter_list):
  
     # load Claim Ratio (xlsx)
     try:
-       df_cr_raw = pd.read_excel(uploaded_cr)
-     
-       df_cr_raw.columns = (
-          df_cr_raw.columns
-          .str.strip()
-          .str.replace(" ", "", regex=False)
-    )
-
-except Exception as e:
-    st.error(f"Error reading Claim Ratio file: {e}")
-    df_cr_raw = pd.DataFrame()
+        df_cr_raw = pd.read_excel(uploaded_cr)
+    except Exception as e:
+        st.error(f"Error reading Claim Ratio file: {e}")
+        df_cr_raw = pd.DataFrame()
  
     # prepro SC and benefit using excel_c logic
     df_sc_clean = template_sc(df_sc_raw)
