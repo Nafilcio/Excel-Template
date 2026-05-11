@@ -249,6 +249,8 @@ def save_to_excel_d(df_sc, df_benefit, claim_ratio_df, filename: str):
         how='left',
         suffixes=('','_sc')
     )
+ 
+    policy_totals = (sc_grouped.groupby(['Policy No'], as_index=False).agg({'Claim': 'sum','Sum of Billed': 'sum','Sum of Unpaid': 'sum','Sum of Excess Total': 'sum','Sum of Excess Coy': 'sum','Sum of Excess Emp': 'sum'}))
     # Tambahin kolom untuk kebutuhan report
     #Member dari data Claim Ratio
     member_col_candidates = ['Member', 'Members', 'Total Member', 'Total Members']
@@ -260,10 +262,7 @@ def save_to_excel_d(df_sc, df_benefit, claim_ratio_df, filename: str):
      merged = merged.merge(member_lookup,on='Policy No',how='left')
     else:
         merged['Member'] = 0
-    #Product dari data SC
-    product_lookup = (df_sc.groupby('Policy No')['Product Type'].apply(lambda x: ', '.join(sorted(set(x.dropna().astype(str))))).reset_index().rename(columns={'Product Type': 'Product'}))
- 
-    merged = merged.merge(product_lookup,on='Policy No',how='left',suffixes=('', '_lookup'))
+
  
     if 'Product' not in merged.columns:
      if 'Product_x' in merged.columns:
@@ -287,6 +286,7 @@ def save_to_excel_d(df_sc, df_benefit, claim_ratio_df, filename: str):
       merged['Member'] = 0
  
     merged['Member'] = merged['Member'].fillna(0)
+    merged['Member'] = pd.to_numeric(merged['Member'], errors='coerce').fillna(0)
     # Ensure merged numeric
     for col in ['Sum of Billed','Sum of Unpaid','Sum of Excess Total','Sum of Excess Coy','Sum of Excess Emp','Claim']:
         merged[col] = pd.to_numeric(merged.get(col, 0), errors='coerce').fillna(0)
@@ -300,11 +300,10 @@ def save_to_excel_d(df_sc, df_benefit, claim_ratio_df, filename: str):
     merged['CR'] = merged.apply(lambda r: (r['Claim'] / r['Net Premi'] * 100) if r['Net Premi'] else 0, axis=1)
     merged['Est CR'] = merged.apply(lambda r: (r['Est Claim Total'] / r['Net Premi'] * 100) if r['Net Premi'] else 0, axis=1)
  
-    merged['Policy Claim Total'] = merged.groupby(['Policy No', 'Company'])['Claim'].transform('sum')
-    merged['Policy CR'] = (merged['Policy Claim Total'] / merged['Net Premi'] * 100)
-    merged['Policy CR'] = merged['Policy CR'].fillna(0)
+    merged = merged.merge(policy_totals,on='Policy No',how='left',suffixes=('', '_policy'))
+ 
+    merged['Product'] = merged['Product'].fillna('')
     merged = merged.rename(columns={'Excess Coy': 'Excess Company','Excess Emp': 'Excess Employee','CR': 'Claim Ratio','Est CR': 'Est Claim Ratio Full Year'})
-    merged = merged.drop_duplicates(subset=['Policy No','Company','Product'])
     cr_columns_header = ["Policy No","Company","Product","Member","Net Premi","Billed","Unpaid","Excess Total","Excess Company","Excess Employee","Claim","Claim Ratio","Est Claim Ratio Full Year"]
     for c in cr_columns_header:
         if c not in merged.columns:
@@ -320,7 +319,7 @@ def save_to_excel_d(df_sc, df_benefit, claim_ratio_df, filename: str):
      'Excess Company': merged['Excess Company'].sum(),
      'Excess Employee': merged['Excess Employee'].sum(),
      # pakai policy total supaya tidak duplicate antar product
-     'Claim': grand_base['Policy Claim Total'].sum()
+     'Claim': grand_base['Claim_policy'].sum()
     }
  
 
@@ -334,15 +333,15 @@ def save_to_excel_d(df_sc, df_benefit, claim_ratio_df, filename: str):
         header_fmt = workbook.add_format({'font_name':'Aptos','font_size':11,'bold':True,'align':'center','border':1})
         border_fmt = workbook.add_format({'font_name':'Aptos','font_size':11,'border':1})
         borderbold_fmt = workbook.add_format({'font_name':'Aptos','font_size':11,'bold':True,'border':1})
-        num_fmt = workbook.add_format({'font_name':'Aptos','font_size':11,'border':1,'num_format':'#,##0;[Red]-#,##0;""','align':'center','valign':'vcenter'})
+        num_fmt = workbook.add_format({'font_name':'Aptos','font_size':11,'border':1,'num_format':'#,##0;[Red]-#,##0;""','align':'right','valign':'vcenter'})
         date_fmt = workbook.add_format({'font_name':'Aptos','font_size':11,'border':1,'num_format':'dd/mm/yyyy'})
         plain_fmt = workbook.add_format({'font_name':'Aptos','font_size':11})
-        plain_border = workbook.add_format({'border':1,'font_name':'Aptos','num_format':'#,##0;[Red]-#,##0;"-";@','align':'center','valign':'vcenter'})
+        plain_border = workbook.add_format({'border':1,'font_name':'Aptos','num_format':'#,##0;[Red]-#,##0;"-";@','align':'right','valign':'vcenter'})
         bold_plain_border = workbook.add_format({'bold':True,'border':1,'font_name':'Aptos','num_format':'#,##0;[Red]-#,##0;"-";@'})
         header_border = workbook.add_format({'bold':True,'border':1,'align':'center','font_name':'Aptos','num_format':'#,##0;[Red]-#,##0;"-";@'})
-        highlight_yellow = workbook.add_format({'bg_color':'#FFFF00','border':1,'num_format':'0.00"%"','font_name':'Aptos','align':'center','valign':'vcenter'})
-        highlight_yellow_bold = workbook.add_format({'bg_color':'#FFFF00','border':1,'bold':True,'num_format':'0.00"%"','font_name':'Aptos'})
-        percent_format = workbook.add_format({'border': 1, 'num_format': '0.00"%"', 'font_name': 'Aptos', 'align':'center','valign':'vcenter'})
+        highlight_yellow = workbook.add_format({'bg_color':'#FFFF00','border':1,'num_format':'0.00"%"','font_name':'Aptos','align':'right','valign':'vcenter'})
+        highlight_yellow_bold = workbook.add_format({'bg_color':'#FFFF00','border':1,'bold':True,'num_format':'0.00"%"','font_name':'Aptos','align':'right','valign':'vcenter'})
+        percent_format = workbook.add_format({'border': 1, 'num_format': '0.00"%"', 'font_name': 'Aptos', 'align':'right','valign':'vcenter'})
         boolean_format = workbook.add_format({'border': 1, 'font_name': 'Aptos', 'num_format': '"TRUE";;"FALSE"' })
         # Summary
         summary_sheet = workbook.add_worksheet('Summary')
@@ -386,9 +385,15 @@ def save_to_excel_d(df_sc, df_benefit, claim_ratio_df, filename: str):
            for ci, col_name in enumerate(cr_columns_header):
             val = rowdata.get(col_name, 0)
             if col_name == 'Claim':
-             val = rowdata.get('Policy Claim Total', 0)
+             val = rowdata.get('Claim_policy', 0)
             if col_name == 'Claim Ratio':
-             val = rowdata.get('Policy CR', 0)
+             total_claim = rowdata.get('Claim_policy', 0)
+             net_premi = rowdata.get('Net Premi', 0)
+             val = (total_claim / net_premi * 100) if net_premi else 0
+            if col_name == 'Est Claim Ratio Full Year':
+             est_claim_total = rowdata.get('Est Claim Total', 0)
+             net_premi = rowdata.get('Net Premi', 0)
+             val = (est_claim_total / net_premi * 100) if net_premi else 0
             merge_cols = [
              'Policy No',
              'Company',
@@ -412,7 +417,7 @@ def save_to_excel_d(df_sc, df_benefit, claim_ratio_df, filename: str):
                float(val),
                highlight_yellow
               )
-             elif col_name in ('Net Premi', 'Claim', 'Member'):
+             elif col_name in ('Net Premi', 'Member'):
               summary_sheet.merge_range(
                first_row,
                ci,
@@ -422,14 +427,11 @@ def save_to_excel_d(df_sc, df_benefit, claim_ratio_df, filename: str):
                num_fmt
               )
              else:
-              summary_sheet.merge_range(
-               first_row,
-               ci,
-               last_row,
-               ci,
-               val,
-               plain_border
-              )
+              if col_name in ['Policy No', 'Company']:
+               merge_center_fmt = workbook.add_format({'border':1,'font_name':'Aptos','align':'center','valign':'vcenter'})
+               summary_sheet.merge_range(first_row,ci,last_row,ci,val,merge_center_fmt)
+              else:
+               summary_sheet.merge_range(first_row,ci,last_row,ci,val,plain_border)
             else:
              if col_name in ('Claim Ratio', 'Est Claim Ratio Full Year'):
               summary_sheet.write_number(
@@ -439,6 +441,7 @@ def save_to_excel_d(df_sc, df_benefit, claim_ratio_df, filename: str):
                highlight_yellow
               )
              elif col_name in (
+              'Member',
               'Net Premi',
               'Est Claim Total',
               'Billed',
@@ -459,17 +462,16 @@ def save_to_excel_d(df_sc, df_benefit, claim_ratio_df, filename: str):
                num_fmt
               )
              else:
-              summary_sheet.write(
-               excel_row,
-               ci,
-               val,
-               plain_border
-              )
+              if col_name in ['Policy No', 'Company', 'Product']:
+               center_text_fmt = workbook.add_format({'border':1,'font_name':'Aptos','align':'center','valign':'vcenter'})
+               summary_sheet.write(excel_row,ci,val,center_text_fmt)
+              else:
+               summary_sheet.write(excel_row,ci,val,plain_border)
           start_row += len(group)
           r = start_row
          # GRAND TOTAL ROW
          summary_sheet.merge_range(r, 0, r, 2, 'Grand Total', borderbold_fmt)
-         member_total = grand_base['Member'].sum() if 'Member' in grand_base.columns else 0
+         member_total = (merged[['Policy No', 'Member']].drop_duplicates(subset=['Policy No'])['Member'].astype(float).sum()) if 'Member' in merged.columns else 0
          grand_values = {
           3: member_total,
           4: grand['Net Premi'],
