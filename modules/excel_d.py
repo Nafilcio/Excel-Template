@@ -409,12 +409,18 @@ def save_to_excel_d(df_sc, df_benefit, claim_ratio_df, filename: str):
             # MERGE CELL
             if col_name in merge_cols and len(group) > 1:
              if col_name in ('Claim Ratio', 'Est Claim Ratio Full Year'):
+              try:
+               numeric_val = float(val)
+               if pd.isna(numeric_val) or np.isinf(numeric_val):
+                numeric_val = 0
+              except:
+               numeric_val = 0
               summary_sheet.merge_range(
                first_row,
                ci,
                last_row,
                ci,
-               float(val),
+               numeric_val,
                highlight_yellow
               )
              elif col_name in ('Net Premi', 'Member'):
@@ -434,10 +440,16 @@ def save_to_excel_d(df_sc, df_benefit, claim_ratio_df, filename: str):
                summary_sheet.merge_range(first_row,ci,last_row,ci,val,plain_border)
             else:
              if col_name in ('Claim Ratio', 'Est Claim Ratio Full Year'):
+              try:
+               numeric_val = float(val)
+               if pd.isna(numeric_val) or np.isinf(numeric_val):
+                numeric_val = 0
+              except:
+               numeric_val = 0
               summary_sheet.write_number(
                excel_row,
                ci,
-               float(val),
+               numeric_val,
                highlight_yellow
               )
              elif col_name in (
