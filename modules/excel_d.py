@@ -330,19 +330,19 @@ def save_to_excel_d(df_sc, df_benefit, claim_ratio_df, filename: str):
     with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
         workbook = writer.book
         # formats
-        header_fmt = workbook.add_format({'font_name':'Aptos','font_size':11,'bold':True,'align':'center','border':1})
-        border_fmt = workbook.add_format({'font_name':'Aptos','font_size':11,'border':1})
-        borderbold_fmt = workbook.add_format({'font_name':'Aptos','font_size':11,'bold':True,'border':1})
-        num_fmt = workbook.add_format({'font_name':'Aptos','font_size':11,'border':1,'num_format':'#,##0;[Red]-#,##0;""','align':'right','valign':'vcenter'})
-        date_fmt = workbook.add_format({'font_name':'Aptos','font_size':11,'border':1,'num_format':'dd/mm/yyyy'})
-        plain_fmt = workbook.add_format({'font_name':'Aptos','font_size':11})
-        plain_border = workbook.add_format({'border':1,'font_name':'Aptos','num_format':'#,##0;[Red]-#,##0;"-";@','align':'right','valign':'vcenter'})
-        bold_plain_border = workbook.add_format({'bold':True,'border':1,'font_name':'Aptos','num_format':'#,##0;[Red]-#,##0;"-";@'})
-        header_border = workbook.add_format({'bold':True,'border':1,'align':'center','font_name':'Aptos','num_format':'#,##0;[Red]-#,##0;"-";@'})
-        highlight_yellow = workbook.add_format({'bg_color':'#FFFF00','border':1,'num_format':'0.00"%"','font_name':'Aptos','align':'right','valign':'vcenter'})
-        highlight_yellow_bold = workbook.add_format({'bg_color':'#FFFF00','border':1,'bold':True,'num_format':'0.00"%"','font_name':'Aptos','align':'right','valign':'vcenter'})
-        percent_format = workbook.add_format({'border': 1, 'num_format': '0.00"%"', 'font_name': 'Aptos', 'align':'right','valign':'vcenter'})
-        boolean_format = workbook.add_format({'border': 1, 'font_name': 'Aptos', 'num_format': '"TRUE";;"FALSE"' })
+        header_fmt = workbook.add_format({'font_name':'Asuransi Astra Type','font_size':11,'bold':True,'align':'center','border':1})
+        border_fmt = workbook.add_format({'font_name':'Asuransi Astra Type','font_size':11,'border':1})
+        borderbold_fmt = workbook.add_format({'font_name':'Asuransi Astra Type','font_size':11,'bold':True,'border':1})
+        num_fmt = workbook.add_format({'font_name':'Asuransi Astra Type','font_size':11,'border':1,'num_format':'#,##0;[Red]-#,##0;""','align':'right','valign':'vcenter'})
+        date_fmt = workbook.add_format({'font_name':'Asuransi Astra Type','font_size':11,'border':1,'num_format':'dd/mm/yyyy'})
+        plain_fmt = workbook.add_format({'font_name':'Asuransi Astra Type','font_size':11})
+        plain_border = workbook.add_format({'border':1,'font_name':'Asuransi Astra Type','num_format':'#,##0;[Red]-#,##0;"-";@','align':'right','valign':'vcenter'})
+        bold_plain_border = workbook.add_format({'bold':True,'border':1,'font_name':'Asuransi Astra Type','num_format':'#,##0;[Red]-#,##0;"-";@'})
+        header_border = workbook.add_format({'bold':True,'border':1,'align':'center','font_name':'Asuransi Astra Type','num_format':'#,##0;[Red]-#,##0;"-";@'})
+        highlight_yellow = workbook.add_format({'bg_color':'#FFFF00','border':1,'num_format':'0.00"%"','font_name':'Asuransi Astra Type','align':'right','valign':'vcenter'})
+        highlight_yellow_bold = workbook.add_format({'bg_color':'#FFFF00','border':1,'bold':True,'num_format':'0.00"%"','font_name':'Asuransi Astra Type','align':'right','valign':'vcenter'})
+        percent_format = workbook.add_format({'border': 1, 'num_format': '0.00"%"', 'font_name': 'Asuransi Astra Type', 'align':'right','valign':'vcenter'})
+        boolean_format = workbook.add_format({'border': 1, 'font_name': 'Asuransi Astra Type', 'num_format': '"TRUE";;"FALSE"' })
         # Summary
         summary_sheet = workbook.add_worksheet('Summary')
         writer.sheets['Summary'] = summary_sheet
@@ -434,7 +434,7 @@ def save_to_excel_d(df_sc, df_benefit, claim_ratio_df, filename: str):
               )
              else:
               if col_name in ['Policy No', 'Company']:
-               merge_center_fmt = workbook.add_format({'border':1,'font_name':'Aptos','align':'center','valign':'vcenter'})
+               merge_center_fmt = workbook.add_format({'border':1,'font_name':'Asuransi Astra Type','align':'center','valign':'vcenter'})
                summary_sheet.merge_range(first_row,ci,last_row,ci,val,merge_center_fmt)
               else:
                summary_sheet.merge_range(first_row,ci,last_row,ci,val,plain_border)
@@ -475,7 +475,7 @@ def save_to_excel_d(df_sc, df_benefit, claim_ratio_df, filename: str):
               )
              else:
               if col_name in ['Policy No', 'Company', 'Product']:
-               center_text_fmt = workbook.add_format({'border':1,'font_name':'Aptos','align':'center','valign':'vcenter'})
+               center_text_fmt = workbook.add_format({'border':1,'font_name':'Asuransi Astra Type','align':'center','valign':'vcenter'})
                summary_sheet.write(excel_row,ci,val,center_text_fmt)
               else:
                summary_sheet.write(excel_row,ci,val,plain_border)
