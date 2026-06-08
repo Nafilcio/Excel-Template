@@ -134,12 +134,12 @@ def save_to_excel_c(df_sc, df_benefit, filename: str):
         workbook = writer.book
 
         #formats
-        header_fmt = workbook.add_format({'font_name': 'Aptos', 'font_size': 11, 'bold': True,'align': 'center', 'border': 1})
-        border_fmt = workbook.add_format({'font_name': 'Aptos', 'font_size': 11, 'border': 1})
-        borderbold_fmt = workbook.add_format({'font_name': 'Aptos', 'font_size': 11, 'bold': True,'border': 1})
-        num_fmt = workbook.add_format({'font_name': 'Aptos', 'font_size': 11, 'border': 1, 'num_format': '#,##0;[Red]-#,##0;""'})
-        date_fmt = workbook.add_format({'font_name': 'Aptos', 'font_size': 11, 'border': 1, 'num_format': 'dd/mm/yyyy'})
-        plain_fmt = workbook.add_format({'font_name': 'Aptos', 'font_size': 11})
+        header_fmt = workbook.add_format({'font_name': 'Asuransi Astra Type', 'font_size': 11, 'bold': True,'align': 'center', 'border': 1})
+        border_fmt = workbook.add_format({'font_name': 'Asuransi Astra Type', 'font_size': 11, 'border': 1})
+        borderbold_fmt = workbook.add_format({'font_name': 'Asuransi Astra Type', 'font_size': 11, 'bold': True,'border': 1})
+        num_fmt = workbook.add_format({'font_name': 'Asuransi Astra Type', 'font_size': 11, 'border': 1, 'num_format': '#,##0;[Red]-#,##0;""'})
+        date_fmt = workbook.add_format({'font_name': 'Asuransi Astra Type', 'font_size': 11, 'border': 1, 'num_format': 'dd/mm/yyyy'})
+        plain_fmt = workbook.add_format({'font_name': 'Asuransi Astra Type', 'font_size': 11})
 
         # Summary sheet
         summary = workbook.add_worksheet("Summary")
@@ -178,7 +178,7 @@ def save_to_excel_c(df_sc, df_benefit, filename: str):
 
         sc.write(0, 0, "List Claim", plain_fmt)
         sc.write(1, 0, df_sc["Client Name"].iloc[0] if not df_sc.empty else "", plain_fmt)
-        sc.merge_range(2, 0, 2, 1, "YTD Apr 2026", plain_fmt)
+        sc.merge_range(2, 0, 2, 1, "YTD May 2026", plain_fmt)
 
         #Header
         for col_idx, col_name in enumerate(df_sc.columns):
