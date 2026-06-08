@@ -132,12 +132,12 @@ def save_to_excel_e(df_sc, df_benefit, filename: str):
         workbook = writer.book
 
         # formats
-        header_fmt = workbook.add_format({'font_name': 'Aptos', 'font_size': 11, 'bold': True,'align': 'center', 'border': 1})
-        border_fmt = workbook.add_format({'font_name': 'Aptos', 'font_size': 11, 'border': 1})
-        borderbold_fmt = workbook.add_format({'font_name': 'Aptos', 'font_size': 11, 'bold': True,'border': 1})
-        num_fmt = workbook.add_format({'font_name': 'Aptos', 'font_size': 11, 'border': 1, 'num_format': '#,##0;[Red]-#,##0;""'})
-        date_fmt = workbook.add_format({'font_name': 'Aptos', 'font_size': 11, 'border': 1, 'num_format': 'dd/mm/yyyy'})
-        plain_fmt = workbook.add_format({'font_name': 'Aptos', 'font_size': 11})
+        header_fmt = workbook.add_format({'font_name': 'Asuransi Astra Type', 'font_size': 11, 'bold': True,'align': 'center', 'border': 1})
+        border_fmt = workbook.add_format({'font_name': 'Asuransi Astra Type', 'font_size': 11, 'border': 1})
+        borderbold_fmt = workbook.add_format({'font_name': 'Asuransi Astra Type', 'font_size': 11, 'bold': True,'border': 1})
+        num_fmt = workbook.add_format({'font_name': 'Asuransi Astra Type', 'font_size': 11, 'border': 1, 'num_format': '#,##0;[Red]-#,##0;""'})
+        date_fmt = workbook.add_format({'font_name': 'Asuransi Astra Type', 'font_size': 11, 'border': 1, 'num_format': 'dd/mm/yyyy'})
+        plain_fmt = workbook.add_format({'font_name': 'Asuransi Astra Type', 'font_size': 11})
 
         # summary sheet
         summary = workbook.add_worksheet("Summary")
